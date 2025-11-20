@@ -1,0 +1,121 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=nom, année de sortie, tags, liens youtube des ost, de 10 occurences de  {{ $json.type }}",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        -160,
+        -32
+      ],
+      "id": "e230c3b6-e824-4f6c-abb2-5d16efb02dab",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatMistralCloud",
+      "typeVersion": 1,
+      "position": [
+        -304,
+        160
+      ],
+      "id": "46bc55e3-c6d0-4130-8819-1d5facb12a56",
+      "name": "Mistral Cloud Chat Model",
+      "credentials": {
+        "mistralCloudApi": {
+          "id": "4SSUovuG26twmkxF",
+          "name": "Mistral Cloud account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "[\n  {\n\t\"type\": \"object\",\n\t\"properties\": {\n\t\t\"year\": {\n\t\t\t\"type\": \"year\"\n\t\t},\n      \t\"tags\": {\n\t\t\t\"type\": \"array of string\"\n\t\t},\n      \t\"liens\": {\n\t\t\t\"type\": \"array of url\"\n\t\t}\n\t}\n}\n]"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        16,
+        176
+      ],
+      "id": "03c16307-7319-4589-86ce-d45c741d14b1",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -768,
+        -32
+      ],
+      "id": "83879374-84be-4e9e-9eaa-3d3f49e60ab5",
+      "name": "Film",
+      "alwaysOutputData": true
+    }
+  ],
+  "pinData": {
+    "Film": [
+      {
+        "json": {
+          "type": "film"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Mistral Cloud Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Film": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "a993e0ab-95ce-40ad-83a6-50442dfaf5b5",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "d78269844155b16763cd6a1b9fa82bcc03330ef55859288798361eaa98869456"
+  },
+  "id": "IwdDihBik9KLSlKj",
+  "tags": []
+}
